@@ -27,6 +27,8 @@ b2 = Ballot([:A, :B, :C])
 @test b1 == b2
 @test hash(b1) == hash(b2)
 @test hash(Ballot([:A, :C])) != hash(b1)
+@test [:A, :B, :C] == b1[vote(1, 2, 3)]
+@test [:A, :C, :B] == b1[vote(1, 3, 2)]
 
 votes = Votes([:A, :B, :C],
         [1 2 3;
@@ -54,6 +56,9 @@ votes = Votes([32, 64, 12],
 
 @test Votes(Ballot([:A, :B]), [vote(1, 2), vote(2, 1)]) ==
     Votes([:A, :B], vote(1, 2), vote(2, 1))
+
+@test "2× [:A,:B]\n1× [:B,:A]\n" ==
+    string(Votes([:A, :B], 2*vote(1, 2), vote(2, 1)))
 
 ## Examples taken from Coursera "Game Theory II: Advanced Applications" course
 ## from Stanford/UBC.

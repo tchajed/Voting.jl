@@ -61,7 +61,7 @@ end
 
 function show(io::IO, votes::Votes)
     for v in votes
-        v_candidates = votes.ballot[v.order]
+        v_candidates = votes.ballot[v]
         print(io, "$(v.weight)× $(v_candidates)\n")
     end
 end
