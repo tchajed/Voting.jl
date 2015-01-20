@@ -1,4 +1,8 @@
 # Voting
+
+[![Build Status](https://travis-ci.org/tchajed/Voting.jl.svg?branch=master)](https://travis-ci.org/tchajed/Voting.jl.svg?branch=master)
+[![Coverage Status](https://coveralls.io/repos/tchajed/Voting.jl/badge.svg)](https://coveralls.io/r/tchajed/Voting.jl)
+
 Implementations of several voting schemes (technically social choice functions)
 in Julia. Inspired by the Coursera "Game Theory II: Advanced Applications"
 course from Stanford/UCB: terminology mirrors the course.
