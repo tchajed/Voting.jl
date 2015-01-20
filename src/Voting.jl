@@ -48,6 +48,9 @@ immutable Ballot{T}
     candidates::Array{T, 1}
 end
 
+==(b1::Ballot, b2::Ballot) = b1.candidates == b2.candidates
+hash(b::Ballot) = hash(b.candidates)
+
 getindex(b::Ballot, v::Vote) = b.candidates[v.order]
 getindex(b::Ballot, i) = b.candidates[i]
 
@@ -98,6 +101,9 @@ length{T}(votes::Votes{T}) = length(votes.votes)
 start(votes::Votes) = 1
 done(votes::Votes, index) = index > length(votes.votes)
 next(votes::Votes, index) = (votes.votes[index], index+1)
+==(votes1::Votes, votes2::Votes) = (votes1.ballot == votes2.ballot) &&
+    (votes1.votes == votes2.votes)
+hash(votes::Votes) = hash(votes.ballot, hash(votes.votes))
 
 function delete(votes::Votes, i)
     n = length(votes.ballot)

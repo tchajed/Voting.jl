@@ -16,6 +16,40 @@ using Base.Test
 @test [3, 1, 2] == [c for c in 4 * vote(3, 1, 2)]
 @test [3, 1, 2] == collect(vote(3, 1, 2))
 
+# Ballot
+b1 = Ballot([:A, :B, :C])
+b2 = Ballot([:A, :B, :C])
+@test b1 == b2
+@test hash(b1) == hash(b2)
+@test hash(Ballot([:A, :C])) != hash(b1)
+
+votes = Votes([:A, :B, :C],
+        [1 2 3;
+        1 3 2;
+        1 3 2;
+        3 2 1;
+        3 2 1])
+@test 5 == length(votes)
+@test 5 == length([c for c in votes])
+@test 5 == length(collect(votes))
+@test [ vote(1, 2, 3),
+        vote(1, 3, 2),
+        vote(1, 3, 2),
+        vote(3, 2, 1),
+        vote(3, 2, 1) ] == collect(votes)
+@test [:A] == plurality(votes)
+@test [:A, :C] == borda(votes)
+
+votes = Votes([32, 64, 12],
+    10 * vote(3, 1, 2),
+    3 * vote(1, 2, 3),
+    3 * vote(1, 3, 2))
+@test 3 == length(votes)
+@test [12] == plurality(votes)
+
+@test Votes(Ballot([:A, :B]), [vote(1, 2), vote(2, 1)]) ==
+    Votes([:A, :B], vote(1, 2), vote(2, 1))
+
 ## Examples taken from Coursera "Game Theory II: Advanced Applications" course
 ## from Stanford/UBC.
 
