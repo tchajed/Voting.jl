@@ -1,8 +1,23 @@
 using Voting
 using Base.Test
 
-# Examples taken from Coursera "Game Theory II: Advanced Applications" course
-# from Stanford/UBC.
+## Low-level tests
+
+# Construction
+@test vote(3, 1, 2) == Vote([3, 1, 2], 1)
+@test 2 * vote(3, 1, 2) == Vote([3, 1, 2], 2)
+@test 1 * vote(3, 1, 2) == vote(3, 1, 2)
+@test 2 * vote(3, 1, 2) == 2 * vote(3, 1, 2)
+@test hash(vote(3, 1, 2)) == hash(vote(3, 1, 2))
+@test hash(2 * vote(3, 1, 2)) != hash(vote(3, 1, 2))
+
+# Iteration
+@test 3 == length(vote(3, 1, 2))
+@test [3, 1, 2] == [c for c in 4 * vote(3, 1, 2)]
+@test [3, 1, 2] == collect(vote(3, 1, 2))
+
+## Examples taken from Coursera "Game Theory II: Advanced Applications" course
+## from Stanford/UBC.
 
 unit12 = Votes([:A, :B, :C, :D],
        [2 3 1 4;

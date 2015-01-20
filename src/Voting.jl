@@ -13,16 +13,19 @@ export  Vote,
         borda,
         pairwise_elimination
 
-import Base: length, start, done, next, show
+import Base: length, start, done, next, show, ==, hash
 
-type Vote
+immutable Vote
     order::Array{Int64, 1}
     weight::Int64
 end
 
+==(v1::Vote, v2::Vote) = v1.order == v2.order && v1.weight == v2.weight
+hash(v::Vote) = hash(v.order, hash(v.weight))
+
 # Iterate over order
 start(vote::Vote) = 1
-done(vote::Vote, index) = index >= length(vote.order)
+done(vote::Vote, index) = index > length(vote.order)
 next(vote::Vote, index) = (vote.order[index], index+1)
 
 # Construction
@@ -41,14 +44,14 @@ function delete(v::Vote, a)
     Vote(order, v.weight)
 end
 
-type Ballot{T}
+immutable Ballot{T}
     candidates::Array{T, 1}
 end
 
 getindex(b::Ballot, v::Vote) = b.candidates[v.order]
 getindex(b::Ballot, i) = b.candidates[i]
 
-type Votes{T}
+immutable Votes{T}
     ballot::Ballot{T}
     votes::Array{Vote, 1}
 end
