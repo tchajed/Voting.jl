@@ -84,10 +84,9 @@ end
 
 function Votes{T}(candidates::Array{T, 1}, a::Array{Int64, 2})
     m = size(a, 1)
-    votes = []
-    for row in 1:m
+    votes = map(1:m) do row
         ordering = collect(a[row,:])
-        push!(votes, vote(ordering))
+        vote(ordering)
     end
     return Votes(candidates, votes...)
 end
