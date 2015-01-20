@@ -66,11 +66,11 @@ length(b::Ballot) = length(b.candidates)
 function Votes{T}(b::Ballot{T}, votes::Array{Vote, 1})
     l = length(b)
     for v in votes
-        if v.order != unique(v.order)
-            throw(ArgumentError("order $(v.order) is not a permutation"))
-        end
         if length(v) != l
             throw(ArgumentError("unexpected vote of length $(length(v)) != $l"))
+        end
+        if sort(v.order) != collect(1:l)
+            throw(ArgumentError("order $(v.order) is not a permutation"))
         end
     end
     return Votes{T}(b, votes)
