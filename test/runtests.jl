@@ -10,6 +10,11 @@ using Base.Test
 @test 2 * vote(3, 1, 2) == 2 * vote(3, 1, 2)
 @test hash(vote(3, 1, 2)) == hash(vote(3, 1, 2))
 @test hash(2 * vote(3, 1, 2)) != hash(vote(3, 1, 2))
+candidates = [:A, :B, :C]
+@test_throws ArgumentError Votes(candidates, vote(1, 2, 3, 4))
+@test_throws ArgumentError Votes(candidates, vote(1, 2))
+@test_throws ArgumentError Votes(candidates, vote(1, 2, 4))
+@test_throws ArgumentError Votes(candidates, vote(1, 2, 2))
 
 # Iteration
 @test 3 == length(vote(3, 1, 2))
