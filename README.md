@@ -1,6 +1,6 @@
 # Voting
 
-[![Build Status](https://travis-ci.org/tchajed/Voting.jl.svg?branch=master)](https://travis-ci.org/tchajed/Voting.jl.svg?branch=master)
+[![Build Status](https://travis-ci.org/tchajed/Voting.jl.svg?branch=master)](https://travis-ci.org/tchajed/Voting.jl)
 [![Coverage Status](https://coveralls.io/repos/tchajed/Voting.jl/badge.svg)](https://coveralls.io/r/tchajed/Voting.jl)
 
 Implementations of several voting schemes (technically social choice functions)
