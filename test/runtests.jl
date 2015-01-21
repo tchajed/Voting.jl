@@ -54,8 +54,11 @@ votes = Votes([32, 64, 12],
 @test 3 == length(votes)
 @test [12] == plurality(votes)
 
-@test Votes(Ballot([:A, :B]), [vote(1, 2), vote(2, 1)]) ==
-    Votes([:A, :B], vote(1, 2), vote(2, 1))
+votes1 = Votes(Ballot([:A, :B]), [vote(1, 2), vote(2, 1)])
+votes2 = Votes([:A, :B], vote(1, 2), vote(2, 1))
+@test votes1 == votes2
+@test hash(votes1) == hash(votes2)
+@test hash(votes1) != hash(votes)
 
 @test "2× [:A,:B]\n1× [:B,:A]\n" ==
     string(Votes([:A, :B], 2*vote(1, 2), vote(2, 1)))
