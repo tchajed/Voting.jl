@@ -2,7 +2,6 @@ module Voting
 
 export  Vote,
         Votes,
-        Ballot,
         vote,
 
         pareto_dominates,
@@ -44,33 +43,22 @@ function delete(v::Vote, a)
     Vote(order, v.weight)
 end
 
-immutable Ballot{T}
-    candidates::Array{T, 1}
-end
-
-==(b1::Ballot, b2::Ballot) = b1.candidates == b2.candidates
-hash(b::Ballot, h::Uint64) = hash(b.candidates, h)
-
-getindex(b::Ballot, v::Vote) = b.candidates[v.order]
-getindex(b::Ballot, i) = b.candidates[i]
-
 immutable Votes{T}
-    ballot::Ballot{T}
+    ballot::Array{T, 1}
     votes::Array{Vote, 1}
 end
 
 function show(io::IO, votes::Votes)
     for v in votes
-        v_candidates = votes.ballot[v]
-        print(io, "$(v.weight)× $(v_candidates)\n")
+        v_ballot = votes.ballot[v.order]
+        print(io, "$(v.weight)× $(v_ballot)\n")
     end
 end
 
 length(v::Vote) = length(v.order)
-length(b::Ballot) = length(b.candidates)
 
-function Votes{T}(b::Ballot{T}, votes::Array{Vote, 1})
-    l = length(b)
+function Votes{T}(ballot::Array{T, 1}, votes::Array{Vote, 1})
+    l = length(ballot)
     for v in votes
         if length(v) != l
             throw(ArgumentError("unexpected vote of length $(length(v)) != $l"))
@@ -79,22 +67,18 @@ function Votes{T}(b::Ballot{T}, votes::Array{Vote, 1})
             throw(ArgumentError("order $(v.order) is not a permutation"))
         end
     end
-    return Votes{T}(b, votes)
+    return Votes{T}(ballot, votes)
 end
 
-# TODO(tchajed): provide a conversion (convert) from Array{T, 1} to Ballot{T}
+Votes{T}(ballot::Array{T, 1}, votes::Vote...) = Votes(ballot, collect(votes))
 
-function Votes{T}(candidates::Array{T, 1}, votes...)
-    Votes(Ballot(candidates), collect(votes))
-end
-
-function Votes{T}(candidates::Array{T, 1}, a::Array{Int64, 2})
+function Votes{T}(ballot::Array{T, 1}, a::Array{Int64, 2})
     m = size(a, 1)
     votes = map(1:m) do row
         ordering = collect(a[row,:])
         vote(ordering)
     end
-    return Votes(candidates, votes...)
+    return Votes(ballot, votes...)
 end
 
 length{T}(votes::Votes{T}) = length(votes.votes)
@@ -108,7 +92,7 @@ hash(votes::Votes, h::Uint64) = hash(votes.ballot, hash(votes.votes, h))
 function delete(votes::Votes, i)
     n = length(votes.ballot)
     selection = [1:i-1, i+1:n]
-    return Votes(Ballot(votes.ballot[selection]),
+    return Votes(votes.ballot[selection],
     [delete(v, i) for v in votes])
 end
 

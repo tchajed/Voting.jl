@@ -10,25 +10,16 @@ using Base.Test
 @test 2 * vote(3, 1, 2) == 2 * vote(3, 1, 2)
 @test hash(vote(3, 1, 2)) == hash(vote(3, 1, 2))
 @test hash(2 * vote(3, 1, 2)) != hash(vote(3, 1, 2))
-candidates = [:A, :B, :C]
-@test_throws ArgumentError Votes(candidates, vote(1, 2, 3, 4))
-@test_throws ArgumentError Votes(candidates, vote(1, 2))
-@test_throws ArgumentError Votes(candidates, vote(1, 2, 4))
-@test_throws ArgumentError Votes(candidates, vote(1, 2, 2))
+ballot = [:A, :B, :C]
+@test_throws ArgumentError Votes(ballot, vote(1, 2, 3, 4))
+@test_throws ArgumentError Votes(ballot, vote(1, 2))
+@test_throws ArgumentError Votes(ballot, vote(1, 2, 4))
+@test_throws ArgumentError Votes(ballot, vote(1, 2, 2))
 
 # Iteration
 @test 3 == length(vote(3, 1, 2))
 @test [3, 1, 2] == [c for c in 4 * vote(3, 1, 2)]
 @test [3, 1, 2] == collect(vote(3, 1, 2))
-
-# Ballot
-b1 = Ballot([:A, :B, :C])
-b2 = Ballot([:A, :B, :C])
-@test b1 == b2
-@test hash(b1) == hash(b2)
-@test hash(Ballot([:A, :C])) != hash(b1)
-@test [:A, :B, :C] == b1[vote(1, 2, 3)]
-@test [:A, :C, :B] == b1[vote(1, 3, 2)]
 
 votes = Votes([:A, :B, :C],
         [1 2 3;
@@ -54,7 +45,7 @@ votes = Votes([32, 64, 12],
 @test 3 == length(votes)
 @test [12] == plurality(votes)
 
-votes1 = Votes(Ballot([:A, :B]), [vote(1, 2), vote(2, 1)])
+votes1 = Votes([:A, :B], [vote(1, 2), vote(2, 1)])
 votes2 = Votes([:A, :B], vote(1, 2), vote(2, 1))
 @test votes1 == votes2
 @test hash(votes1) == hash(votes2)
@@ -115,8 +106,8 @@ unit13 = Votes([:A, :B, :C, :D],
         1 4 3 2])
 @test [:D] == pairwise_elimination(unit13, [:A, :B, :C, :D])
 @test [:A] == pairwise_elimination(unit13, [:D, :C, :B, :A])
-candidates = unit13.ballot.candidates
-for first in candidates, other in candidates
+ballot = unit13.ballot
+for first in ballot, other in ballot
     @test !pareto_dominates(unit13, first, other)
 end
 
