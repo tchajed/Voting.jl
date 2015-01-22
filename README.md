@@ -5,7 +5,7 @@
 
 Implementations of several voting schemes (technically social choice functions)
 in Julia. Inspired by the Coursera "Game Theory II: Advanced Applications"
-course from Stanford/UCB: terminology mirrors the course.
+course from Stanford/UBC: terminology mirrors the course.
 
 All schemes currently require a strict set of preferences; that is, an ordering
 over all the candidates, with no indifferences. This could eventually be
