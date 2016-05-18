@@ -12,7 +12,7 @@ export  Vote,
         borda,
         pairwise_elimination
 
-import Base: length, start, done, next, show, ==, hash
+import Base: length, start, done, next, show, ==, hash, *
 
 immutable Vote
     order::Array{Int64, 1}
@@ -91,7 +91,7 @@ hash(votes::Votes, h::UInt64) = hash(votes.ballot, hash(votes.votes, h))
 
 function delete(votes::Votes, i)
     n = length(votes.ballot)
-    selection = [1:i-1, i+1:n]
+    selection = [1:i-1; i+1:n]
     return Votes(votes.ballot[selection],
     [delete(v, i) for v in votes])
 end
@@ -145,7 +145,7 @@ function pairwise_elimination{T}(votes::Votes{T}, agenda::Array{T, 1})
         a = indices[1]
         b = indices[2]
         winner = prefer(votes, a, b) ? a : b
-        indices = [winner, indices[3:end]]
+        indices = [winner; indices[3:end]]
     end
     return [votes.ballot[indices[1]]]
 end
@@ -164,7 +164,7 @@ end
 function condorcet{T}(votes::Votes{T})
     n = length(votes.ballot)
     for c in 1:n
-        if all(o -> prefer(votes, c, o), [1:c-1, c+1:n])
+        if all(o -> prefer(votes, c, o), [1:c-1; c+1:n])
             return votes.ballot[[c]]
         end
     end
