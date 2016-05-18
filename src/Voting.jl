@@ -20,7 +20,7 @@ immutable Vote
 end
 
 ==(v1::Vote, v2::Vote) = v1.order == v2.order && v1.weight == v2.weight
-hash(v::Vote, h::Uint64) = hash(v.order, hash(v.weight, h))
+hash(v::Vote, h::UInt64) = hash(v.order, hash(v.weight, h))
 
 # Iterate over order
 start(vote::Vote) = 1
@@ -87,7 +87,7 @@ done(votes::Votes, index) = index > length(votes.votes)
 next(votes::Votes, index) = (votes.votes[index], index+1)
 ==(votes1::Votes, votes2::Votes) = (votes1.ballot == votes2.ballot) &&
     (votes1.votes == votes2.votes)
-hash(votes::Votes, h::Uint64) = hash(votes.ballot, hash(votes.votes, h))
+hash(votes::Votes, h::UInt64) = hash(votes.ballot, hash(votes.votes, h))
 
 function delete(votes::Votes, i)
     n = length(votes.ballot)
